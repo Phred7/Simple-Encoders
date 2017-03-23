@@ -1,10 +1,17 @@
 
 package org.usfirst.frc.team2906.robot;
 
+import org.usfirst.frc.team2906.robot.commands.AutoNone;
+import org.usfirst.frc.team2906.robot.subsystems.Arm;
+import org.usfirst.frc.team2906.robot.subsystems.EncodingDriveTrain;
+
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,101 +22,88 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * functions corresponding to each mode, as described in the IterativeRobot
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the manifest file in the resource
- * directory.
+ * directory.C:\Users\wward\Desktop\FRC Workspace\SentinelSteamworks
  */
 public class Robot extends IterativeRobot {
 
-
-	public static OI oi;
-
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
+	Command AutoNone;
+	
+	public static OI oi;
+	public static Arm armControl;
+	public static Encoder encoderLeftDrive;
+	public static Encoder encoderRightDrive;
+	public static CameraServer cameraserver;
+	public static EncodingDriveTrain encodingDriveTrain;
+	
+	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
+	final String autoNone = "No Auto";
+	//final String autonomousCommand = "Auto Command I";
+	
+	String[] autoChooserList = { autoNone };
+
 	@Override
 	public void robotInit() {
+		RobotMap.init();
+		
 		oi = new OI();
-		//chooser.addDefault("Default Auto", new nobodyknows());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+		
+		encodingDriveTrain = new EncodingDriveTrain();
+		armControl = new Arm(); 
+		
+		NetworkTable table = NetworkTable.getTable("SmartDashboard");
+		table.putStringArray("Auto List", autoChooserList);
+		
+		autoChooser = new SendableChooser();
+		autoChooser.addDefault("No Auto", new AutoNone());
+		
+		
+		SmartDashboard.putData("Auto mode", autoChooser);
 	}
 
-	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
-	 */
-	@Override
 	public void disabledInit() {
-
+		Robot.encodingDriveTrain.ResetEncoders();
 	}
 
-	@Override
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
-	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		autonomousCommand = (Command) autoChooser.getSelected();
+	    System.out.println("Auto selected: " + autoChooser.getSelected());
+	   
 
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
+		Robot.encodingDriveTrain.ResetEncoders();
 
-		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
+		if (autonomousCommand != null) {
 			autonomousCommand.start();
+		}
 	}
 
-	/**
-	 * This function is called periodically during autonomous
-	 */
-	@Override
 	public void autonomousPeriodic() {
+		
 		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("encoder value left", (RobotMap.encoderLeftDrive.get()));
+        SmartDashboard.putNumber("encoder value right",  (RobotMap.encoderRightDrive.get()));
+		
 	}
 
-	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
+
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("encoder value left", (RobotMap.encoderLeftDrive.get()));
+        SmartDashboard.putNumber("encoder value right",  (RobotMap.encoderRightDrive.get()));
 	}
 
-	/**
-	 * This function is called periodically during test mode
-	 */
-	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+
 }
