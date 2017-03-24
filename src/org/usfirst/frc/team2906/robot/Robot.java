@@ -36,6 +36,10 @@ public class Robot extends IterativeRobot {
 	public static CameraServer cameraserver;
 	public static EncodingDriveTrain encodingDriveTrain;
 	
+	public static double leftEncodingValue = Math.abs(Robot.encodingDriveTrain.getLeftDistance());
+	public static double rightEncodingValue = Math.abs(Robot.encodingDriveTrain.getRightDistance());
+
+	
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	final String autoNone = "No Auto";

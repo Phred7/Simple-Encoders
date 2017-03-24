@@ -10,5 +10,6 @@ public class AutoNone extends CommandGroup {
     public AutoNone() {
         
     	addSequential(new DriveStop());
+    	//fire any pistons to default positions and release any servos that are necessary
     }
 }
