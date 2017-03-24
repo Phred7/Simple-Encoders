@@ -1,8 +1,5 @@
 package org.usfirst.frc.team2906.robot.subsystems;
 
-
-
-
 import org.usfirst.frc.team2906.robot.Robot;
 import org.usfirst.frc.team2906.robot.RobotMap;
 import org.usfirst.frc.team2906.robot.commands.DriveWithJoysticks;
@@ -19,6 +16,7 @@ public class EncodingDriveTrain extends Subsystem {
 
     public void initDefaultCommand() {
     	setDefaultCommand(new DriveWithJoysticks());
+    	
     	}
 
     	public void arcadeDrive(double move, double rotate) {
