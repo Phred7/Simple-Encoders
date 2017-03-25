@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team2906.robot;
 
-import org.usfirst.frc.team2906.robot.commands.AutoNone;
+import org.usfirst.frc.team2906.robot.commands.*;
 import org.usfirst.frc.team2906.robot.subsystems.Arm;
 import org.usfirst.frc.team2906.robot.subsystems.EncodingDriveTrain;
 
@@ -16,18 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.C:\Users\wward\Desktop\FRC Workspace\SentinelSteamworks
- */
 public class Robot extends IterativeRobot {
 
 	Command autonomousCommand;
 	Command AutoNone;
+	Command AutoTesting;
 	
 	public static OI oi;
 	public static Arm armControl;
@@ -43,9 +36,9 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	final String autoNone = "No Auto";
-	//final String autonomousCommand = "Auto Command I";
+    final String autoTesting = "Test Auto";
 	
-	String[] autoChooserList = { autoNone };
+	String[] autoChooserList = { autoNone, autoTesting };
 
 	@Override
 	public void robotInit() {
@@ -61,6 +54,7 @@ public class Robot extends IterativeRobot {
 		
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("No Auto", new AutoNone());
+		autoChooser.addObject("Test Auto", new AutoTesting());
 		
 		
 		SmartDashboard.putData("Auto mode", autoChooser);
@@ -76,7 +70,8 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		autonomousCommand = (Command) autoChooser.getSelected();
-	    System.out.println("Auto selected: " + autoChooser.getSelected());
+		SmartDashboard.getData("Auto selected: " + autoChooser.getSelected());
+	    //System.out.println("Auto selected: " + autoChooser.getSelected());
 	   
 
 		Robot.encodingDriveTrain.ResetEncoders();
