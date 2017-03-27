@@ -86,6 +86,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("encoder value left", (RobotMap.encoderLeftDrive.get()));
         SmartDashboard.putNumber("encoder value right",  (RobotMap.encoderRightDrive.get()));
+        SmartDashboard.putNumber("Arm Encoder", (RobotMap.encoderArm.get()));
 		
 	}
 
@@ -99,6 +100,8 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("encoder value left", (RobotMap.encoderLeftDrive.get()));
         SmartDashboard.putNumber("encoder value right",  (RobotMap.encoderRightDrive.get()));
+        SmartDashboard.putNumber("Arm Encoder", (RobotMap.encoderArm.get()));
+        SmartDashboard.putNumber("Arm Degree", (RobotMap.encoderArm.getDistance()));
 	}
 
 	public void testPeriodic() {

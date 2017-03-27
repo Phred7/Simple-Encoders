@@ -17,10 +17,12 @@ public class RobotMap {
 	public static Encoder encoderArm;
 	public static RobotDrive encodingDriveTrain;
 	public static CameraServer driveCamI;
-
-	public static double tickPerInch = 13.79;
+	
+	public static double tickPerDegree = (360 / 520);
+	public static double tickPerInch = 13.79; //for more accuracy try 13.80042463: 520/(12*Math.PI)
 	// for 6in wheels and AM toughbox mini. May need to be adjusted
 
+	
 	public static final double sensitivity = 0.1;
 
 
@@ -51,6 +53,11 @@ public class RobotMap {
 		encoderRightDrive.setPIDSourceType(PIDSourceType.kDisplacement);
 		encoderRightDrive.setDistancePerPulse(1.0 / tickPerInch);
 		encoderRightDrive.reset();
+		
+		encoderArm = new Encoder(4, 5, true, Encoder.EncodingType.k4X);
+		encoderArm.setPIDSourceType(PIDSourceType.kDisplacement);
+		encoderArm.setDistancePerPulse(1.0 / tickPerDegree);
+		encoderArm.reset();
 
 		CameraServer server1 = CameraServer.getInstance();
 		
