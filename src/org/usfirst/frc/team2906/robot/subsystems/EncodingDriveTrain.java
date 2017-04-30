@@ -48,5 +48,13 @@ public class EncodingDriveTrain extends Subsystem {
 			robotDrive.arcadeDrive(0.0, 0.0);
 			robotDrive.tankDrive(0.0, 0.0);
 		}
+		
+		public void stopLeft(double speed) {
+			robotDrive.tankDrive(0.0, speed);
+		}
+		
+		public void stopRight(double speed) {
+			robotDrive.tankDrive(speed, 0.0);
+		}
 }
 
